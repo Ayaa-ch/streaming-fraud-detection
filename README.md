@@ -14,9 +14,9 @@ pre-trained MLlib models, persisted into Cassandra and visualised in real time.
 - [1. Architecture & project flow](#1-architecture--project-flow)
   - [1.1 How it works](#11-how-it-works)
 - [2. Demo](#2-demo)
-  - [2.1 Power BI — Executive dashboard](#21-power-bi--executive-dashboard)
-  - [2.2 Power BI — Interactive drill-down](#22-power-bi--interactive-drill-down)
-  - [2.3 Streamlit — live application](#23-streamlit--live-application)
+  - [2.1 Streamlit — live application](#21-streamlit--live-application)
+  - [2.2 Power BI — Executive dashboard](#22-power-bi--executive-dashboard)
+  - [2.3 Power BI — Interactive drill-down](#23-power-bi--interactive-drill-down)
 - [3. Repository layout](#3-repository-layout)
 - [4. Tech stack](#4-tech-stack)
 - [5. Getting started](#5-getting-started)
@@ -54,21 +54,7 @@ every 3 s) → **Kafka topic `transaction_data`** → **Spark Structured Streami
 
 ## 2. Demo
 
-### 2.1 Power BI — Executive dashboard
-
-![Power BI dashboard](Streaming-Fraud-Detection/demo/dashboard.png)
-
-*Global KPIs: total / fraudulent transactions, amount by transaction status, fraud per category, per age group,
-per time of day and the historical fraud trend.*
-
-### 2.2 Power BI — Interactive drill-down
-
-![Power BI interactive view](Streaming-Fraud-Detection/demo/interactive.png)
-
-*Interactive decomposition tree: **Transaction Status → City → Category → Day of week → Time of day**,
-with slicers on month and instant cross-filtering on every visual.*
-
-### 2.3 Streamlit — live application
+### 2.1 Streamlit — live application
 
 <video src="Streaming-Fraud-Detection/demo/streamlit-demo.mp4" controls width="100%"></video>
 
@@ -76,6 +62,20 @@ with slicers on month and instant cross-filtering on every visual.*
 
 Three pages: **Overview** (KPIs, time series, live transaction feed), **Transaction Analysis**
 (search + drill-down per transaction) and **Detailed Statistics** (fraud rate, distributions, alerts, CSV export).
+
+### 2.2 Power BI — Executive dashboard
+
+![Power BI dashboard](Streaming-Fraud-Detection/demo/dashboard.png)
+
+*Global KPIs: total / fraudulent transactions, amount by transaction status, fraud per category, per age group,
+per time of day and the historical fraud trend.*
+
+### 2.3 Power BI — Interactive drill-down
+
+![Power BI interactive view](Streaming-Fraud-Detection/demo/interactive.png)
+
+*Interactive decomposition tree: **Transaction Status → City → Category → Day of week → Time of day**,
+with slicers on month and instant cross-filtering on every visual.*
 
 ---
 
@@ -231,7 +231,7 @@ Additional EDA charts live in
 * **Cassandra** — `fraud_detection.transactions_pred` (prediction + model per transaction) and
   `fraud_detection.alerts` (`HIGH_VALUE_FRAUD` / `SUSPECTED_FRAUD`, risk score, status).
 * **Streamlit** — KPIs, time series, fraud distributions, alert list, CSV export.
-* **Power BI** — executive dashboard and interactive decomposition tree (see §2.1, §2.2).
+* **Power BI** — executive dashboard and interactive decomposition tree (see §2.2, §2.3).
 * **E-mail** — optional SMTP alert for every fraudulent transaction (`SMTP_ENABLED=true`).
 
 ---
