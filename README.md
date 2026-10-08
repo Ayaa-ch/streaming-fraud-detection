@@ -39,26 +39,7 @@ pre-trained MLlib models, persisted into Cassandra and visualised in real time.
 
 ![Architecture](Streaming-Fraud-Detection/demo/architecture.png)
 
-```mermaid
-flowchart LR
-    subgraph Offline["Offline / batch training"]
-        A1["fraudTrain.csv"] --> A2["PySpark<br/>feature engineering"]
-        A2 --> A3["MLlib models<br/>RandomForest · LogisticRegression · GBT"]
-        A3 --> A4[("resultats/models<br/>PipelineModel")]
-    end
 
-    subgraph Stream["Real-time pipeline"]
-        B1["fraudTest.csv"] --> B2["Kafka producer<br/>topic: transaction_data"]
-        B2 --> B3["Kafka broker"]
-        B3 --> B4["Spark Structured Streaming<br/>spark_streaming_predict.py"]
-        A4 --> B4
-        B4 --> B5[("Cassandra<br/>fraud_detection")]
-    end
-
-    B5 --> C1["Streamlit dashboard"]
-    B5 --> C2["Power BI dashboard"]
-    B5 -.->|optional SMTP| C3["E-mail alert"]
-```
 
 ### 1.1 How it works
 
