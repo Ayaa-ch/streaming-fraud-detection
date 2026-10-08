@@ -5,7 +5,6 @@
 Transactions are simulated from a historical dataset, pushed into a Kafka topic, scored in streaming by
 pre-trained MLlib models, persisted into Cassandra and visualised in real time.
 
-> Project report (French, local only — not pushed to Git): `Rapport_Projet_BIG_DATA.pdf`
 > Source code: [`Streaming-Fraud-Detection/`](Streaming-Fraud-Detection/)
 
 ---
