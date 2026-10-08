@@ -65,14 +65,14 @@ Three pages: **Overview** (KPIs, time series, live transaction feed), **Transact
 
 ### 2.2 Power BI — Executive dashboard
 
-<img src="Streaming-Fraud-Detection/demo/dashboard.png" alt="Power BI dashboard" width="760">
+<img src="Streaming-Fraud-Detection/demo/dashboard.png" alt="Power BI dashboard" width="660">
 
 *Global KPIs: total / fraudulent transactions, amount by transaction status, fraud per category, per age group,
 per time of day and the historical fraud trend.*
 
 ### 2.3 Power BI — Interactive drill-down
 
-<img src="Streaming-Fraud-Detection/demo/interactive.png" alt="Power BI interactive view" width="760">
+<img src="Streaming-Fraud-Detection/demo/interactive.png" alt="Power BI interactive view" width="660">
 
 *Interactive decomposition tree: **Transaction Status → City → Category → Day of week → Time of day**,
 with slicers on month and instant cross-filtering on every visual.*
@@ -218,7 +218,7 @@ Held-out test set (80/20 split, class-weighted training):
 | Gradient Boosted Trees | 0.9689 | 0.9759 | 0.9837 |
 | Logistic Regression | 0.8642 | 0.9463 | 0.9674 |
 
-<img src="Streaming-Fraud-Detection/resultats/EDA/visualisation/model_comparison.png" alt="Model comparison" width="620">
+<img src="Streaming-Fraud-Detection/resultats/EDA/visualisation/model_comparison.png" alt="Model comparison" width="400">
 
 Additional EDA charts live in
 [`Streaming-Fraud-Detection/resultats/EDA/visualisation/`](Streaming-Fraud-Detection/resultats/EDA/visualisation/)
