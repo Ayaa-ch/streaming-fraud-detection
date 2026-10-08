@@ -36,7 +36,7 @@ pre-trained MLlib models, persisted into Cassandra and visualised in real time.
 
 ## 1. Architecture & project flow
 
-![Architecture](Streaming-Fraud-Detection/demo/architecture.png)
+<img src="Streaming-Fraud-Detection/demo/architecture.png" alt="Architecture" width="760">
 
 
 
@@ -65,14 +65,14 @@ Three pages: **Overview** (KPIs, time series, live transaction feed), **Transact
 
 ### 2.2 Power BI — Executive dashboard
 
-![Power BI dashboard](Streaming-Fraud-Detection/demo/dashboard.png)
+<img src="Streaming-Fraud-Detection/demo/dashboard.png" alt="Power BI dashboard" width="760">
 
 *Global KPIs: total / fraudulent transactions, amount by transaction status, fraud per category, per age group,
 per time of day and the historical fraud trend.*
 
 ### 2.3 Power BI — Interactive drill-down
 
-![Power BI interactive view](Streaming-Fraud-Detection/demo/interactive.png)
+<img src="Streaming-Fraud-Detection/demo/interactive.png" alt="Power BI interactive view" width="760">
 
 *Interactive decomposition tree: **Transaction Status → City → Category → Day of week → Time of day**,
 with slicers on month and instant cross-filtering on every visual.*
@@ -218,7 +218,7 @@ Held-out test set (80/20 split, class-weighted training):
 | Gradient Boosted Trees | 0.9689 | 0.9759 | 0.9837 |
 | Logistic Regression | 0.8642 | 0.9463 | 0.9674 |
 
-![Model comparison](Streaming-Fraud-Detection/resultats/EDA/visualisation/model_comparison.png)
+<img src="Streaming-Fraud-Detection/resultats/EDA/visualisation/model_comparison.png" alt="Model comparison" width="620">
 
 Additional EDA charts live in
 [`Streaming-Fraud-Detection/resultats/EDA/visualisation/`](Streaming-Fraud-Detection/resultats/EDA/visualisation/)
