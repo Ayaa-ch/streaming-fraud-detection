@@ -1,0 +1,134 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    restart: unless-stopped
+
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+      - "29092:29092" 
+    environment:
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    depends_on:
+      - zookeeper
+    restart: unless-stopped
+
+  kafka-client:
+    build:
+      context: ..
+      dockerfile: src/kafka/Dockerfile
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      KAFKA_TOPIC: "${KAFKA_TOPIC:-transaction_data}"
+      KAFKA_SEND_INTERVAL_SECONDS: "${KAFKA_SEND_INTERVAL_SECONDS:-3}"
+    depends_on:
+      - kafka
+    restart: unless-stopped
+  spark-master:
+    image: bitnami/spark:latest
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "7077:7077"  # Spark Master API
+      - "8080:8080"  # Spark Master UI
+    networks:
+      - spark-net
+
+  spark-worker-1:
+    image: bitnami/spark:latest
+    container_name: spark-worker-1
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+    networks:
+      - spark-net
+
+  spark-worker-2:
+    image: bitnami/spark:latest
+    container_name: spark-worker-2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+    networks:
+      - spark-net
+
+  spark-notebook:
+    image: jupyter/pyspark-notebook
+    container_name: spark-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/work  # Mount toàn bộ project folder
+    environment:
+      - PYSPARK_PYTHON=python3
+    depends_on:
+      - spark-master
+    networks:
+      - spark-net
+  cassandra:
+    image: cassandra:4.0
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE KEYSPACES' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+    networks:
+      - spark-net
+
+  # Creates the keyspace + tables on the first start
+  cassandra-init:
+    image: cassandra:4.0
+    container_name: cassandra-init
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ../cassandra_init.cql:/init.cql:ro
+    entrypoint: ["/bin/sh", "-c", "cqlsh cassandra 9042 -f /init.cql"]
+    restart: "no"
+    networks:
+      - spark-net
+
+  # Power BI / Streamlit companion dashboard
+  streamlit:
+    build:
+      context: ..
+      dockerfile: app/Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      CASSANDRA_HOSTS: cassandra
+      CASSANDRA_KEYSPACE: fraud_detection
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - spark-net
+ 
+volumes:
+  cassandra_data:
+
+networks:
+  spark-net:
+
